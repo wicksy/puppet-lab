@@ -2,6 +2,7 @@
 ## site.pp ##
 
 import "nodes"
+import "nodes/*.pp"
 
 # This file (/etc/puppetlabs/puppet/manifests/site.pp) is the main entry point
 # used when an agent connects to a master and asks for an updated configuration.
@@ -62,6 +63,18 @@ class profile::mytest {
   }
 }
 
+class profile::githost {
+  package {'git':
+    ensure => installed,
+  }
+  user {'gituser':
+    ensure     => present,
+    home       => '/home/git',
+    managehome => true,
+    shell      => '/bin/bash',
+  }
+}
+
 class role {
   include profile::base
 }
@@ -76,4 +89,9 @@ class role::agent inherits role {
 
 class role::mytest inherits role {
   include profile::mytest
+}
+
+class role::githost inherits role {
+  include profile::githost
+  include wicksy
 }
