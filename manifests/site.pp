@@ -32,6 +32,7 @@ File { backup => 'main' }
 class profile::base {
   include myntp
   include myapache
+  include myssh
   include human
   class {'myclass':
     myname => 'Johnny Five',
