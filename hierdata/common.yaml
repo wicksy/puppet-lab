@@ -1,2 +1,3 @@
 
 wicksy: This is a test message by Wicksy on %{::operatingsystem} %{::operatingsystemrelease}
+machinetype: camaster

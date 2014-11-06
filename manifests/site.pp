@@ -34,6 +34,7 @@ class profile::base {
   include myapache
   include myssh
   include human
+  include audit
   class {'myclass':
     myname => 'Johnny Five',
     myage  => 105,
@@ -61,6 +62,11 @@ class profile::agent {
 class profile::mytest {
   package {'lynx':
     ensure => latest,
+  }
+
+  if hiera('machinetype') == 'camaster' {
+    notify{"$fqdn is a CA master":}
+    include mymod
   }
 }
 

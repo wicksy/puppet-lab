@@ -5,5 +5,6 @@ class wicksy {
   }
   exec {"mytest":
     command => "/root/tmp/mytest.sh",
+    returns => [0,10,20,30],
   }
 }
