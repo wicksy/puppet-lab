@@ -27,5 +27,6 @@ node 'agent2.localdomain' {
 node /agent[0-9].*/ {
   include role::agent
   include role::mytest
+  include wicksy
 }
 
