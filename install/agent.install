@@ -1,0 +1,1 @@
+#puppet node install --login root --installer-payload puppet-enterprise-2.7.0-el-5-i386.tar.gz --install-script puppet-enterprise  --installer-answers=agent.answers --keyfile ~/.ssh/id_rsa --debug agent3
