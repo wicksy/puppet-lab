@@ -71,9 +71,8 @@ class profile::mytest {
 }
 
 class profile::githost {
-  package {'git':
-    ensure => installed,
-  }
+  include stdlib
+  ensure_packages(['git'])
   user {'gituser':
     ensure     => present,
     home       => '/home/git',
