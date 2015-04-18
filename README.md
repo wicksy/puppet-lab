@@ -1,95 +1,16 @@
 puppet-lab
 ==========
-Test repo with modules et al from home puppet lab
+Mostly stuff played about with whilst learning Puppet at home with
+a 2.7 VM from puppetlabs docs and training video shorts. Mostly
+crap now but still useful on odd occassions to refer back to, 
+mainly to see how badly I used to write stuff.
 
-.
-|-- README.md
-|-- data
-|   |-- pe_accounts_groups_hash.yaml
-|   `-- pe_accounts_users_hash.yaml
-|-- hiera.yaml
-|-- hierdata
-|   `-- common.yaml
-|-- install
-|   |-- README
-|   |-- agent.answers
-|   `-- agent.install
-|-- manifests
-|   |-- backup.site
-|   |-- nodes
-|   |   `-- githosts.pp
-|   |-- nodes.pp
-|   `-- site.pp
-`-- modules
-    |-- accounts
-    |   |-- files
-    |   |-- manifests
-    |   |   |-- init.pp
-    |   |   `-- virtual.pp
-    |   `-- templates
-    |-- audit
-    |   |-- files
-    |   |-- manifests
-    |   |   `-- init.pp
-    |   `-- templates
-    |-- custom
-    |   `-- lib
-    |       `-- facter
-    |           `-- wicksy.rb
-    |-- human
-    |   |-- files
-    |   |-- manifests
-    |   |   |-- init.pp
-    |   |   `-- user.pp
-    |   `-- templates
-    |       `-- basher.erb
-    |-- myapache
-    |   |-- files
-    |   |   |-- 404.php
-    |   |   `-- httpd.conf
-    |   |-- manifests
-    |   |   |-- init.pp
-    |   |   `-- vhost.pp
-    |   `-- templates
-    |       `-- vhost-default.conf.erb
-    |-- myclass
-    |   |-- files
-    |   |-- manifests
-    |   |   `-- init.pp
-    |   `-- templates
-    |-- mymod
-    |   |-- files
-    |   |-- manifests
-    |   |   |-- init.pp
-    |   |   `-- wicksy.pp
-    |   `-- templates
-    |-- myntp
-    |   |-- files
-    |   |   |-- CentOS.ntp
-    |   |   |-- debian.ntp
-    |   |   |-- redhat.ntp -> CentOS.ntp
-    |   |   `-- ubuntu.ntp -> debian.ntp
-    |   |-- manifests
-    |   |   `-- init.pp
-    |   `-- templates
-    |       |-- CentOS.ntp.erb
-    |       |-- debian.ntp.erb
-    |       |-- redhat.ntp.erb
-    |       `-- ubuntu.ntp.erb
-    |-- myssh
-    |   |-- files
-    |   |   `-- sshd_config
-    |   |-- manifests
-    |   |   `-- init.pp
-    |   `-- templates
-    |-- sep
-    |   `-- manifests
-    |       `-- init.pp
-    `-- wicksy
-        |-- files
-        |   `-- mytest.sh
-        |-- manifests
-        |   `-- init.pp
-        `-- templates
+Newer stuff is in the foreman-lab elsewhere github as it's stuff
+done under the puppet master that comes with theforeman. Again
+not brilliant but still learning the ropes but still stuff that
+seemed to work well out in the field albeit lacking consistent
+style.
 
-47 directories, 41 files
+Newer stuff will appear here post Puppet Practitioner course so
+I now have an idea around recommended module architecture, style
+and layout. 
