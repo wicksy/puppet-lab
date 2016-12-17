@@ -1,8 +1,0 @@
-sysop:
-  locked: false
-  comment: System Operator
-  uid: '700'
-  gid: '700'
-  groups:
-  - admin
-  - wicks
