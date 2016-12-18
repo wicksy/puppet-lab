@@ -1,0 +1,46 @@
+class postfix::firewall {
+
+  include postfix
+
+  firewall {"340 accept inbound SMTP":
+    chain  => 'INPUT',
+    state  => ['NEW'],
+    dport => '25',
+    proto  => 'tcp',
+    action => 'accept',
+  }
+
+  firewall {"340 accept outbound SMTP":
+    chain  => 'OUTPUT',
+    state  => ['NEW'],
+    dport  => '25',
+    proto  => 'tcp',
+    action => 'accept',
+  }
+
+  firewall {"300 allow inbound proxy web":
+    chain  => 'INPUT',
+    state  => ['NEW'],
+    dport  => '8080',
+    sport  => '1024-65535',
+    proto  => 'tcp',
+    action => 'accept',
+  }
+
+  firewall {"310 allow outbound HTTP":
+    chain  => 'OUTPUT',
+    state  => ['NEW'],
+    dport  => '80',
+    proto  => 'tcp',
+    action => 'accept',
+  }
+
+  firewall {"320 allow outbound HTTPS":
+    chain  => 'OUTPUT',
+    state  => ['NEW'],
+    dport  => '443',
+    proto  => 'tcp',
+    action => 'accept',
+  }
+
+}

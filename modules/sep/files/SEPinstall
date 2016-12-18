@@ -1,0 +1,91 @@
+#!/bin/bash
+
+# Install Symantec End Point protection 
+
+# Trace 
+#
+set -x
+
+# Logfile definitions
+#
+thisprog=`/bin/basename $0`
+tmp="/var/tmp/"
+log="${tmp}${thisprog}.log"
+working="${tmp}/${thisprog}.$$"
+
+# Other vars
+#
+repo="http://repo:8080"
+repopath="repo/zip"
+installzip="SEP.zip"
+policyzip="CustomPolicies.zip"
+policytmp="UnlimitedJCEPolicy"
+policydir="/usr/java/jdk1.7.0_71/jre/lib/security/"
+
+exe="/opt/Symantec/symantec_antivirus/sav"
+wget="/usr/bin/wget --tries=5 \
+                    --timeout=60 \
+                    --wait=10"
+
+unzip="/usr/bin/unzip"
+mkdir="/bin/mkdir"
+cp="/bin/cp"
+rm="/bin/rm"
+mv="/bin/mv"
+sh="/bin/bash"
+
+installer="install.sh -i"
+uninstaller="install.sh -u"
+
+# Don't run if SEP already installed or Java policies target doesn't exist
+#
+[[ -x ${exe} && -s ${exe} ]] && exit 0
+[[ ! -d ${policydir} ]] && exit 110
+
+# Save any previously completed install log if I am running the install
+#
+[[ -s ${log}.installed ]] && mv ${log}.installed ${log}.prior.$$.installed
+
+# Redirect to log
+#
+exec 1>${log}
+exec 2>&1
+
+# Make working dir
+#
+${mkdir} -p "${working}" || exit 120
+cd "${working}" || exit 130
+
+# Pull down zips
+#
+${wget} "${repo}/${repopath}/${installzip}" || exit 140
+${wget} "${repo}/${repopath}/${policyzip}" || exit 150
+
+# Unpack
+#
+${unzip} ${installzip} || exit 160
+${unzip} ${policyzip} || exit 170
+
+# Drop in custom policies
+#
+${cp} -fp ${working}/${policytmp}/local_policy.jar ${policydir} || exit 180
+${cp} -fp ${working}/${policytmp}/US_export_policy.jar ${policydir} || exit 190
+
+# Try and uninstall SEP first in case the install is broken as a re-install will
+# only work if the product has been fully uninstalled first. Don't bother
+# checking exit codes as in most use cases this won't be relevant e.g. the initial
+# provisioning of the host.
+#
+${sh} ./${uninstaller}
+
+# SEP installer
+#
+${sh} ./${installer} || exit 200
+
+# Save install log if you get here as we must have run the installer
+#
+${mv} ${log} ${log}.installed
+
+# Done
+#
+exit 0

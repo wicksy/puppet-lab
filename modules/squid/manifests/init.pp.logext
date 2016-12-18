@@ -1,0 +1,116 @@
+class squid {
+
+  include rsyslog
+
+  package {"squid":
+    ensure        => installed,
+    allow_virtual => false,
+    before        => Service["squid"],
+  }
+
+  service {"squid":
+    ensure  => running,
+    enable  => true,
+    require => Package["squid"],
+  }
+
+  file {"squid.conf":
+    path    => "/etc/squid/squid.conf",
+    owner   => "root",
+    group   => "root",
+    mode    => 0640,
+    source  => "puppet:///modules/${module_name}/squid/${fqdn}.squid.conf",
+    links   => follow,
+    require => Package["squid"],
+    notify  => Service["squid"],
+  }
+
+  file {"web_allow":
+    path    => "/etc/squid/web_allow",
+    owner   => "root",
+    group   => "squid",
+    mode    => 0644,
+    source  => "puppet:///modules/${module_name}/squid/${fqdn}.web_allow",
+    links   => follow,
+    require => Package["squid"],
+    notify  => Service["squid"],
+  }
+
+  file {"00-iptables.conf":
+    path    => "/etc/rsyslog.d/00-iptables.conf",
+    owner   => "root",
+    group   => "root",
+    mode    => 0644,
+    source  => "puppet:///modules/${module_name}/rsyslog/${fqdn}.00-iptables.conf",
+    links   => follow,
+    require => Package["rsyslog"],
+    notify  => Service["rsyslog"],
+  }
+
+  file {"01-squid.conf":
+    path    => "/etc/rsyslog.d/01-squid.conf",
+    owner   => "root",
+    group   => "root",
+    mode    => 0644,
+    source  => "puppet:///modules/${module_name}/rsyslog/${fqdn}.01-squid.conf",
+    links   => follow,
+    require => Package["rsyslog"],
+    notify  => Service["rsyslog"],
+  }
+
+  firewall {"000 log all external input chain":
+    chain      => 'INPUT',
+    jump       => 'LOG',
+    log_level  => '6',
+    log_prefix => '[IPTABLES INPUT] logged ',
+    proto      => 'all',
+    source     => '! 192.168.1.0/24',
+    before     => undef,
+  }
+
+  firewall {"000 log all external forward chain":
+    chain       => 'FORWARD',
+    jump        => 'LOG',
+    log_level   => '6',
+    log_prefix  => '[IPTABLES FORWARD] logged ',
+    proto       => 'all',
+    destination => '! 192.168.0.1/24',
+    before      => undef,
+  }
+
+  firewall {"000 log all external output chain":
+    chain       => 'OUTPUT',
+    jump        => 'LOG',
+    log_level   => '6',
+    log_prefix  => '[IPTABLES OUTPUT] logged ',
+    proto       => 'all',
+    destination => '! 192.168.0.1/24',
+    before      => undef,
+  }
+
+  firewall {"300 allow inbound proxy web":
+    chain  => 'INPUT',
+    state  => ['NEW'],
+    dport  => '8080',
+    sport  => '1024-65535',
+    proto  => 'tcp',
+    action => 'accept',
+  }
+
+  firewall {"310 allow outbound HTTP":
+    chain  => 'OUTPUT',
+    state  => ['NEW'],
+    dport  => '80',
+    proto  => 'tcp',
+    action => 'accept',
+  }
+
+  firewall {"320 allow outbound HTTPS":
+    chain  => 'OUTPUT',
+    state  => ['NEW'],
+    dport  => '443',
+    proto  => 'tcp',
+    action => 'accept',
+  }
+
+}

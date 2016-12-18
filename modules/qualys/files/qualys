@@ -1,0 +1,1 @@
+qualys-user  ALL=(root)  NOPASSWD: ALL
